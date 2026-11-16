@@ -1,5 +1,6 @@
 import random
 import time
+import matplotlib.pyplot as plt
 def threesum_pointer(lst, sum):
     unique_sum = set()
     new_lst = sorted(lst)
@@ -21,10 +22,9 @@ def threesum_pointer(lst, sum):
     measured_time = time.time() - before
     return list(unique_sum), measured_time
 
-def threesum_brute(lst,sum):
+def threesum_brute(lst,sum=0):
     unique_sum = set()
     lst = sorted(lst)
-    before = time.time()
     for i in range(len(lst)-2):
         n1 = lst[i]
         for j in range(i+1,len(lst)-1):
@@ -34,8 +34,7 @@ def threesum_brute(lst,sum):
                 if n1 + n2 + n3 == sum:
                     p = tuple(sorted((n1,n2,n3)))
                     unique_sum.add(p)
-    measured_time = time.time() - before
-    return list(unique_sum), measured_time
+    return list(unique_sum)
 
 
 def threesum_cache(lst,sum):
@@ -60,38 +59,55 @@ def threesum_cache(lst,sum):
 
 
 
-def random_func(size):
+def random_func(size, width):
     lst = []
+    n=size*width
     for i in range(size):
-        r = random.randint(-20,20)
+        r = random.randint(-10*n,10*n)
         lst.append(r)
-    sum = random.randint(0,10)
-    return lst,sum
+    return lst
 
-def plot(size,results):
-    print(size)
-    print(results)
-    for name, label in [("brute", "Brute force"), ("pointer", "Two pointer", ("cache", "Cache set"))]
+def graph(lst):
+    print(lst)
+    for j in range(3):
+        x = []
+        y = []
+        for run,size,time in lst:
+            if run == j:
+                x.append(size)
+                y.append(time)
 
+        plt.plot(x,y,marker="*", linestyle="None",label=f'Körning{j+1}')
+    plt.xlabel("Listans storlek")
+    plt.ylabel("Exekveringstid (sekunder)")
+    plt.title("Brute Force 3-sum")
+    plt.legend()
+    plt.grid()
+    plt.show()
 def main():
-    repeat = 5
-    size = [50, 100, 150, 200, 250, 300]
-    for i in range(repeat):
-        lst,sum = random_func(size[i])
-
+    count = 0
+    result = []
+    for j in range(3):
+        count = 0
+        for i in range(100,850,50):
+            count += 1
+            lst = random_func(i,10)
+            before = time.time()
         #print(sum)
 
-        pointer,time_point = threesum_pointer(lst,sum)
-        brute,time_brute = threesum_brute(lst,sum)
-        cache ,time_cache= threesum_cache(lst,sum)
+       # pointer,time_point = threesum_pointer(lst,sum)
+            brute = threesum_brute(lst)
+            mes_time = time.time() - before
+       # cache ,time_cache= threesum_cache(lst,sum)
        # print(sorted(brute))
         #print(time_point)
         #print(sorted(pointer))
         #print(time_brute)
         #print(sorted(cache))
         #print(time_cache)
-        results = time_brute,time_point,time_cache
-        plot(size[i], results)
-
+            
+            results = mes_time
+            result.append((j,i,round(results,2)))
+    graph(result)
 
 main()
