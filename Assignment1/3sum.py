@@ -21,7 +21,7 @@ def threesum_pointer(lst, sum):
 
     measured_time = time.time() - before
     return list(unique_sum), measured_time
-
+#n^3
 def threesum_brute(lst,sum=0):
     unique_sum = set()
     lst = sorted(lst)
@@ -84,6 +84,11 @@ def graph(lst):
     plt.legend()
     plt.grid()
     plt.show()
+
+
+#def average(lst):
+        
+
 def main():
     count = 0
     result = []
@@ -93,21 +98,11 @@ def main():
             count += 1
             lst = random_func(i,10)
             before = time.time()
-        #print(sum)
-
-       # pointer,time_point = threesum_pointer(lst,sum)
-            brute = threesum_brute(lst)
+            brute_lst = threesum_brute(lst)
             mes_time = time.time() - before
-       # cache ,time_cache= threesum_cache(lst,sum)
-       # print(sorted(brute))
-        #print(time_point)
-        #print(sorted(pointer))
-        #print(time_brute)
-        #print(sorted(cache))
-        #print(time_cache)
-            
-            results = mes_time
-            result.append((j,i,round(results,2)))
+            result.append((j,i,round(mes_time,2)))
+
+    #average(result)
     graph(result)
 
 main()
